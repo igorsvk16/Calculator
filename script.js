@@ -66,7 +66,9 @@ function clearAll() {
     waitForSecondOperand = false;
     return;
 }
-
+function endsWithNumber(value) {
+    return /[0-9]$/.test(value);
+}
 const buttons = document.querySelectorAll(".button");
 const output = document.querySelector('.output');
 let num1 = null;
@@ -77,12 +79,15 @@ let waitForSecondOperand = false;
 
 buttons.forEach(button => {
     button.addEventListener("click", () => {
+        if (button.textContent.includes("⇦")) {
+            currentInput = currentInput.slice(0, -1);
+            return updateDisplay(currentInput);
+        }
         if (button.textContent.includes("C")) {
             clearAll()
             return updateDisplay();
         }
         else if (button.textContent.includes("=")) {
-
             if ((num1 === null) || (num1 !== null && operator !== "" && currentInput === "")) {
                 return;
             } else if (currentInput !== "" && operator !== "") {
@@ -90,7 +95,18 @@ buttons.forEach(button => {
                 currentInput = "";
                 num1 = output.textContent = operate(num1, operator, num2);
                 return clearAll();
-            }  
+            }
+        } else if (button.textContent.includes(".")) {
+            console.log(currentInput);
+            console.log(!currentInput.includes("."))
+            if (!currentInput.includes(".") && currentInput !== "" && endsWithNumber(currentInput)) {
+                console.log('1');
+                currentInput += button.textContent;
+                return updateDisplay(currentInput);
+            } else {
+                console.log('2');
+                return;
+            }
         } else if (["+", "-", "*", "/"].includes(button.textContent)) {
             if (num1 === null && currentInput !== "") {
                 num1 = Number(currentInput);
@@ -111,7 +127,7 @@ buttons.forEach(button => {
                     console.log('1')
                     clearAll();
                     updateDisplay();
-                    return alert('"Were you trying to divide by 0???"');
+                    return alert('"Were you trying to divide by 0???');
                 } else {
                     console.log('2')
                     num2 = Number(currentInput);
