@@ -145,9 +145,16 @@ buttons.forEach(button => {
                 currentInput = "";
                 waitForSecondOperand = false;
             }
+            if (currentInput.length < 13) {
             currentInput += button.textContent;
             updateDisplay(currentInput);
+            }
         }
     })
     
 });
+
+window.addEventListener("keydown", (e) => {
+    const button = document.querySelector(`button[data-key="${e.key}"]`);
+    if (button) button.click();
+})
